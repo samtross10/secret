@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Date Ideas ♡</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FAF5EE;
+  --surface: #FFFFFF;
+  --surface2: #F5EDE3;
+  --accent: #B85C4A;
+  --accent-light: #F2D8D3;
+  --accent-hover: #9E4A3A;
+  --done: #5A8F7B;
+  --done-light: #D8EDE7;
+  --text: #2A1510;
+  --text-muted: #7A5E58;
+  --border: #E5D3CB;
+  --shadow: 0 2px 16px rgba(42,21,16,0.08);
+  --shadow-lg: 0 8px 40px rgba(42,21,16,0.14);
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg); color: var(--text); min-height: 100vh;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 20% -10%, rgba(184,92,74,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 110%, rgba(90,143,123,0.05) 0%, transparent 60%);
+}
+
+/* PASSKEY */
+#lock-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+.lock-card {
+  background: var(--surface); border-radius: 24px; padding: 48px 40px;
+  max-width: 360px; width: 100%; box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border); text-align: center;
+}
+.lock-logo { font-family: 'Playfair Display', serif; font-size: 3rem; color: var(--accent); margin-bottom: 6px; }
+.lock-tagline { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 32px; }
+.lock-field input {
+  width: 100%; padding: 14px 16px;
+  border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif; font-size: 1.05rem;
+  color: var(--text); background: var(--bg); outline: none;
+  text-align: center; letter-spacing: 0.12em; transition: border-color 0.2s;
+}
+.lock-field input:focus { border-color: var(--accent); }
+.lock-field input.shake { animation: shake 0.4s ease; border-color: #e05757; }
+.btn-unlock {
+  width: 100%; padding: 14px; margin-top: 12px;
+  background: var(--accent); color: white; border: none;
+  border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif;
+  font-size: 1rem; font-weight: 500; cursor: pointer; transition: background 0.2s;
+}
+.btn-unlock:hover { background: var(--accent-hover); }
+.lock-error { font-size: 0.82rem; color: #e05757; margin-top: 10px; min-height: 20px; }
+.lock-hint { font-size: 0.77rem; color: var(--text-muted); margin-top: 14px; }
+
+/* APP */
+#app { display: none; }
+header {
+  padding: 20px 24px 0; display: flex; align-items: center;
+  justify-content: space-between; max-width: 1100px; margin: 0 auto;
+}
+.header-logo { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--accent); }
+.header-logo em { font-style: italic; }
+.btn-lock-out {
+  font-size: 0.8rem; color: var(--text-muted);
+  background: none; border: 1px solid var(--border); border-radius: 20px;
+  padding: 5px 12px; cursor: pointer; font-family: 'DM Sans', sans-serif;
+  transition: background 0.2s;
+}
+.btn-lock-out:hover { background: var(--surface2); }
+
+/* TABS */
+.tabs {
+  max-width: 1100px; margin: 20px auto 0; padding: 0 24px;
+  display: flex; gap: 4px; border-bottom: 1.5px solid var(--border);
+}
+.tab-btn {
+  font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 500;
+  color: var(--text-muted); background: none; border: none;
+  padding: 10px 16px; cursor: pointer;
+  border-bottom: 2.5px solid transparent; margin-bottom: -1.5px;
+  transition: color 0.2s, border-color 0.2s; border-radius: 8px 8px 0 0;
+}
+.tab-btn:hover { color: var(--text); }
+.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* TOOLBAR — desktop: single row; mobile: search full-width top, filter+add bottom */
+.toolbar {
+  max-width: 1100px; margin: 16px auto 0; padding: 0 24px;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center; gap: 8px;
+}
+@media (max-width: 540px) {
+  .toolbar {
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+  }
+  .toolbar .search-box   { grid-column: 1 / 3; grid-row: 1; }
+  .toolbar .filter-select{ grid-column: 1;     grid-row: 2; }
+  .toolbar .btn-add      { grid-column: 2;     grid-row: 2; }
+}
+.search-box {
+  min-width: 0; padding: 10px 14px 10px 36px;
+  border: 1.5px solid var(--border); border-radius: 30px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.88rem;
+  background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='%237A5E58' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E") no-repeat 12px center;
+  color: var(--text); outline: none; transition: border-color 0.2s;
+}
+.search-box:focus { border-color: var(--accent); }
+.filter-select {
+  padding: 10px 28px 10px 12px;
+  border: 1.5px solid var(--border); border-radius: 30px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.83rem;
+  color: var(--text-muted); background: var(--surface); outline: none; cursor: pointer;
+  appearance: none; -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237A5E58' stroke-width='2.5'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 9px center;
+  min-width: 0; max-width: 160px; transition: border-color 0.2s;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.filter-select:focus { border-color: var(--accent); }
+.filter-select.active { border-color: var(--accent); color: var(--accent); background-color: var(--accent-light); }
+/* btn-add: text label on desktop, circle "+" on mobile */
+.btn-add {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 10px 18px; background: var(--accent); color: white; border: none;
+  border-radius: 30px; font-family: 'DM Sans', sans-serif;
+  font-size: 0.88rem; font-weight: 500; cursor: pointer;
+  transition: background 0.2s; white-space: nowrap; flex-shrink: 0;
+}
+.btn-add:hover { background: var(--accent-hover); }
+.btn-add .add-label { display: inline; }
+.btn-add .add-plus  { display: none; font-size: 1.3rem; line-height: 1; }
+@media (max-width: 540px) {
+  .btn-add { width: 44px; height: 44px; padding: 0; border-radius: 50%; }
+  .btn-add .add-label { display: none; }
+  .btn-add .add-plus  { display: inline; }
+}
+
+/* GRID */
+.grid {
+  max-width: 1100px; margin: 20px auto 100px; padding: 0 24px;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px;
+}
+
+/* IDEA CARD */
+.idea-card {
+  background: var(--surface); border-radius: var(--radius);
+  border: 1.5px solid var(--border); padding: 20px 20px 16px;
+  box-shadow: var(--shadow); display: flex; flex-direction: column;
+  gap: 9px; transition: box-shadow 0.2s, transform 0.2s;
+  position: relative; overflow: hidden; animation: fadeUp 0.3s ease both;
+}
+.idea-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+.idea-card.done-card { border-color: var(--done); background: linear-gradient(135deg, #fff 0%, #f4faf8 100%); }
+.done-ribbon {
+  position: absolute; top: 14px; right: -26px;
+  background: var(--done); color: white; font-size: 0.62rem; font-weight: 500;
+  padding: 4px 34px; transform: rotate(35deg); letter-spacing: 0.06em; text-transform: uppercase;
+}
+.card-category { font-size: 0.72rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); }
+.card-name { font-family: 'Playfair Display', serif; font-size: 1.2rem; line-height: 1.3; }
+.card-desc { font-size: 0.86rem; color: var(--text-muted); line-height: 1.55; flex: 1; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.card-meta { display: flex; flex-wrap: wrap; gap: 6px; }
+.meta-pill { display: flex; align-items: center; gap: 4px; font-size: 0.78rem; color: var(--text-muted); background: var(--surface2); padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border); max-width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.card-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.card-tag { font-size: 0.73rem; color: var(--text-muted); border: 1px solid var(--border); padding: 2px 8px; border-radius: 12px; background: var(--bg); }
+.card-actions { display: flex; gap: 7px; margin-top: 4px; }
+.btn-did-it { flex: 1; padding: 11px 8px; background: var(--accent-light); color: var(--accent); border: 1.5px solid var(--accent); border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 0.84rem; font-weight: 500; cursor: pointer; transition: all 0.2s; min-height: 44px; }
+.btn-did-it:hover { background: var(--accent); color: white; }
+.btn-view-memory { flex: 1; padding: 11px 8px; background: var(--done-light); color: var(--done); border: 1.5px solid var(--done); border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 0.84rem; font-weight: 500; cursor: pointer; transition: all 0.2s; min-height: 44px; }
+.btn-view-memory:hover { background: var(--done); color: white; }
+.btn-icon { width: 44px; height: 44px; background: var(--surface2); border: 1.5px solid var(--border); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem; transition: background 0.2s; flex-shrink: 0; }
+.btn-icon:hover { background: #fce8e5; }
+
+/* MEMORY CARD */
+.memory-card {
+  background: var(--surface); border-radius: var(--radius); border: 1.5px solid var(--done);
+  overflow: hidden; box-shadow: var(--shadow);
+  transition: box-shadow 0.2s, transform 0.2s; cursor: pointer; animation: fadeUp 0.3s ease both;
+}
+.memory-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+.memory-thumb { height: 200px; overflow: hidden; background: var(--surface2); position: relative; }
+.memory-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s; }
+.memory-card:hover .memory-thumb img { transform: scale(1.04); }
+.memory-thumb .no-photo { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; color: var(--text-muted); }
+.memory-photo-badge {
+  position: absolute; bottom: 10px; right: 10px;
+  background: rgba(42,21,16,0.6); color: white;
+  font-size: 0.74rem; font-weight: 500;
+  padding: 3px 9px; border-radius: 20px; backdrop-filter: blur(4px);
+}
+.memory-body { padding: 15px 18px 18px; }
+.memory-date { font-size: 0.78rem; color: var(--done); font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px; }
+.memory-name { font-family: 'Playfair Display', serif; font-size: 1.2rem; margin-bottom: 7px; line-height: 1.3; }
+.memory-notes { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.memory-location { font-size: 0.78rem; color: var(--text-muted); margin-top: 7px; }
+
+/* EMPTY / LOADING */
+.empty-state { grid-column: 1/-1; text-align: center; padding: 80px 20px; color: var(--text-muted); }
+.empty-state .emoji { font-size: 3rem; margin-bottom: 12px; }
+.empty-state h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--text); margin-bottom: 8px; }
+.empty-state p { font-size: 0.9rem; line-height: 1.5; }
+.loading-state { grid-column: 1/-1; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 80px; color: var(--text-muted); font-size: 0.9rem; }
+.spinner { width: 20px; height: 20px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; }
+
+/* MODALS — sheet on mobile, centered on desktop */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(42,21,16,0.55); backdrop-filter: blur(4px);
+  display: flex; align-items: flex-end; justify-content: center;
+  z-index: 1000; padding: 0;
+  opacity: 0; pointer-events: none; transition: opacity 0.25s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: var(--surface); border-radius: 22px 22px 0 0;
+  width: 100%; max-width: 600px; max-height: 92vh;
+  overflow-y: auto; box-shadow: var(--shadow-lg);
+  transform: translateY(60px);
+  transition: transform 0.3s cubic-bezier(0.34, 1.1, 0.64, 1);
+  scrollbar-width: thin; -webkit-overflow-scrolling: touch;
+}
+.modal-overlay.open .modal { transform: translateY(0); }
+@media (min-width: 640px) {
+  .modal-overlay { align-items: center; padding: 20px; }
+  .modal { border-radius: 20px; max-height: 90vh; transform: translateY(20px); }
+}
+.modal-handle { width: 36px; height: 4px; background: var(--border); border-radius: 2px; margin: 10px auto 0; }
+@media (min-width: 640px) { .modal-handle { display: none; } }
+.modal-header {
+  padding: 14px 22px 12px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; background: var(--surface); z-index: 1;
+}
+.modal-header h2 { font-family: 'Playfair Display', serif; font-size: 1.3rem; }
+.btn-close {
+  width: 34px; height: 34px; border-radius: 50%; border: none;
+  background: var(--surface2); cursor: pointer; font-size: 1rem;
+  color: var(--text-muted); transition: background 0.2s;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.btn-close:hover { background: var(--border); }
+.modal-body { padding: 20px 22px 36px; }
+
+/* FORM */
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; font-size: 0.78rem; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%; padding: 12px 14px;
+  border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif; font-size: 16px;
+  color: var(--text); background: var(--bg); outline: none; transition: border-color 0.2s;
+}
+/* Date inputs: natural width, never overflow */
+.form-group input[type="date"] {
+  width: auto;
+  max-width: 100%;
+  display: block;
+}
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--accent); }
+.form-group textarea { resize: vertical; min-height: 90px; line-height: 1.5; width: 100%; }
+
+/* LOCATION */
+.location-wrap { position: relative; }
+.location-dropdown {
+  position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); z-index: 200;
+  max-height: 230px; overflow-y: auto; box-shadow: var(--shadow-lg); display: none;
+}
+.location-dropdown.open { display: block; }
+.loc-item { padding: 12px 14px; cursor: pointer; border-bottom: 1px solid var(--border); transition: background 0.15s; }
+.loc-item:last-child { border-bottom: none; }
+.loc-item:hover, .loc-item:active { background: var(--accent-light); }
+.loc-name { font-size: 0.88rem; font-weight: 500; color: var(--text); }
+.loc-addr { font-size: 0.76rem; color: var(--text-muted); margin-top: 2px; }
+.loc-clear { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 1rem; display: none; padding: 4px 6px; line-height: 1; }
+
+/* TAGS */
+.tags-wrap {
+  display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 10px;
+  border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--bg); min-height: 50px; cursor: text; transition: border-color 0.2s;
+}
+.tags-wrap:focus-within { border-color: var(--accent); }
+.tag-chip { display: flex; align-items: center; gap: 4px; background: var(--accent-light); color: var(--accent); border-radius: 12px; padding: 4px 8px 4px 10px; font-size: 0.82rem; }
+.tag-chip button { background: none; border: none; cursor: pointer; color: var(--accent); font-size: 0.85rem; line-height: 1; padding: 0; }
+.tags-wrap input { border: none; background: transparent; font-family: 'DM Sans', sans-serif; font-size: 16px; outline: none; flex: 1; min-width: 80px; padding: 2px 4px; color: var(--text); }
+.tag-hint { font-size: 0.76rem; color: var(--text-muted); margin-top: 4px; }
+
+/* BUDGET */
+.budget-row { display: flex; gap: 8px; }
+.budget-opt { flex: 1; padding: 12px 4px; text-align: center; border: 1.5px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; font-size: 0.83rem; font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text-muted); transition: all 0.2s; min-height: 48px; }
+.budget-opt:hover { border-color: var(--accent); color: var(--accent); }
+.budget-opt.sel { background: var(--accent-light); border-color: var(--accent); color: var(--accent); font-weight: 500; }
+
+/* PHOTO UPLOAD */
+.photo-drop { border: 2px dashed var(--border); border-radius: var(--radius-sm); padding: 28px 20px; text-align: center; cursor: pointer; transition: all 0.2s; color: var(--text-muted); font-size: 0.88rem; }
+.photo-drop:hover, .photo-drop:active { border-color: var(--accent); color: var(--accent); }
+.upload-icon { font-size: 2rem; margin-bottom: 6px; }
+.photo-previews { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.preview-wrap { position: relative; width: 82px; height: 82px; }
+.preview-wrap img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); }
+.rm-photo { position: absolute; top: -6px; right: -6px; width: 22px; height: 22px; background: var(--accent); color: white; border: none; border-radius: 50%; cursor: pointer; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; }
+
+/* FORM ACTIONS */
+.form-actions { display: flex; gap: 10px; margin-top: 10px; }
+.btn-cancel { flex: 1; padding: 14px; background: var(--surface2); color: var(--text-muted); border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 0.9rem; cursor: pointer; transition: background 0.2s; }
+.btn-cancel:hover { background: var(--border); }
+.btn-submit { flex: 2; padding: 14px; background: var(--accent); color: white; border: none; border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 500; cursor: pointer; transition: background 0.2s; }
+.btn-submit:hover { background: var(--accent-hover); }
+.btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* Edit memory button inside detail modal */
+.btn-edit-memory {
+  display: inline-flex; align-items: center; gap: 7px;
+  margin-top: 20px; padding: 11px 20px;
+  background: var(--surface2); color: var(--text-muted);
+  border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif; font-size: 0.88rem; cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-edit-memory:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+.gallery-wrap { margin-top: 10px; }
+.gallery-grid { display: grid; gap: 5px; border-radius: 12px; overflow: hidden; }
+.gallery-grid.g1 { grid-template-columns: 1fr; }
+.gallery-grid.g2 { grid-template-columns: 1fr 1fr; }
+.gallery-grid.g3 { grid-template-columns: 2fr 1fr; grid-template-rows: 130px 130px; }
+.gallery-grid.g3 .g-img:first-child { grid-row: 1/3; }
+.gallery-grid.g4 { grid-template-columns: 1fr 1fr; grid-template-rows: 150px 150px; }
+.gallery-grid.gmany { grid-template-columns: repeat(3, 1fr); }
+.g-img { position: relative; overflow: hidden; cursor: pointer; background: var(--surface2); }
+.gallery-grid.g1 .g-img { height: 280px; }
+.gallery-grid.g2 .g-img { height: 180px; }
+.gallery-grid.gmany .g-img { height: 115px; }
+.g-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.25s; display: block; }
+.g-img:hover img { transform: scale(1.05); }
+.g-more {
+  position: absolute; inset: 0;
+  background: rgba(42,21,16,0.58);
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 1.3rem; font-weight: 600;
+  font-family: 'Playfair Display', serif; cursor: pointer;
+}
+
+/* LIGHTBOX */
+#lightbox {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.93);
+  z-index: 2000; display: none; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+#lightbox.open { display: flex; }
+#lb-img { max-width: 95vw; max-height: 80vh; object-fit: contain; border-radius: 8px; }
+#lb-close { position: absolute; top: 16px; right: 20px; color: white; font-size: 2.2rem; cursor: pointer; background: none; border: none; line-height: 1; padding: 4px 8px; }
+.lb-nav { display: flex; gap: 20px; margin-top: 16px; }
+.lb-nav button { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; font-size: 1.4rem; width: 46px; height: 46px; border-radius: 50%; cursor: pointer; transition: background 0.2s; display: flex; align-items: center; justify-content: center; }
+.lb-nav button:hover { background: rgba(255,255,255,0.28); }
+.lb-counter { color: rgba(255,255,255,0.65); font-size: 0.84rem; margin-top: 10px; }
+
+/* TOAST */
+#toast {
+  position: fixed; bottom: 24px; left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--text); color: white;
+  padding: 12px 22px; border-radius: 30px;
+  font-size: 0.88rem; font-weight: 500;
+  z-index: 3000; transition: transform 0.3s, opacity 0.3s;
+  opacity: 0; white-space: nowrap; pointer-events: none;
+  max-width: calc(100vw - 48px); text-align: center;
+}
+#toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes shake { 0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-8px)} 40%,80%{transform:translateX(8px)} }
+
+/* MOBILE */
+@media (max-width: 480px) {
+  .grid { grid-template-columns: 1fr; gap: 12px; padding: 0 16px; }
+  header, .tabs, .toolbar { padding-left: 16px; padding-right: 16px; }
+  .card-actions { flex-wrap: wrap; }
+  .modal-body { padding: 18px 18px 40px; }
+  .modal-header { padding: 12px 18px 10px; }
+  .form-actions { flex-direction: column-reverse; gap: 8px; }
+  .btn-submit { padding: 16px; font-size: 1rem; }
+  .gallery-grid.g3, .gallery-grid.g4 { grid-template-columns: 1fr 1fr; }
+  .gallery-grid.g3 .g-img:first-child { grid-row: auto; }
+}
+</style>
+</head>
+<body>
+
+<!-- PASSKEY -->
+<div id="lock-screen">
+  <div class="lock-card">
+    <div class="lock-logo">♡</div>
+    <p class="lock-tagline">private — enter passkey to continue</p>
+    <div class="lock-field">
+      <input type="password" id="passkey-input" placeholder="••••••••" maxlength="40" autocomplete="current-password">
+    </div>
+    <div class="lock-error" id="lock-error"></div>
+    <button class="btn-unlock" id="btn-unlock">Unlock</button>
+    <p class="lock-hint">This is a private space ♡</p>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <header>
+    <div class="header-logo">♡ <em>date ideas</em></div>
+    <button class="btn-lock-out" id="btn-lock-out">🔒 lock</button>
+  </header>
+
+  <div class="tabs">
+    <button class="tab-btn active" id="tab-ideas">💡 Ideas</button>
+    <button class="tab-btn" id="tab-memories">📸 Memories</button>
+  </div>
+
+  <div id="pane-ideas">
+    <div class="toolbar">
+      <input class="search-box" type="text" id="ideas-search" placeholder="Search ideas…">
+      <select class="filter-select" id="filter-select">
+        <option value="">All categories</option>
+      </select>
+      <button class="btn-add" id="btn-open-add"><span class="add-label">+ Add Idea</span><span class="add-plus">+</span></button>
+    </div>
+    <div class="grid" id="ideas-grid">
+      <div class="loading-state"><div class="spinner"></div> Loading…</div>
+    </div>
+  </div>
+
+  <div id="pane-memories" style="display:none">
+    <div class="toolbar">
+      <input class="search-box" type="text" id="memories-search" placeholder="Search memories…">
+    </div>
+    <div class="grid" id="memories-grid">
+      <div class="loading-state"><div class="spinner"></div> Loading…</div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD / EDIT MODAL -->
+<div class="modal-overlay" id="add-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <h2 id="modal-title">New Date Idea ♡</h2>
+      <button class="btn-close" id="add-close">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Name *</label>
+        <input type="text" id="f-name" placeholder="Picnic at the botanical garden…" autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="f-desc" placeholder="What makes this special? What will you do?"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Category</label>
+        <select id="f-category">
+          <option value="">— pick one —</option>
+          <option>🌿 Outdoors</option>
+          <option>🍽️ Food &amp; Drinks</option>
+          <option>🎨 Arts &amp; Culture</option>
+          <option>🎉 Experience</option>
+          <option>🌙 Nightlife</option>
+          <option>🏡 Stay In</option>
+          <option>✈️ Day Trip</option>
+          <option>🎮 Games &amp; Fun</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Location</label>
+        <div class="location-wrap">
+          <input type="text" id="f-loc-input" placeholder="Search for a place…" autocomplete="off">
+          <button class="loc-clear" id="f-loc-clear">✕</button>
+          <div class="location-dropdown" id="f-loc-dd"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Budget</label>
+        <div class="budget-row" id="budget-row">
+          <button class="budget-opt" data-val="Free">Free</button>
+          <button class="budget-opt" data-val="$">$ Low</button>
+          <button class="budget-opt" data-val="$$">$$ Mid</button>
+          <button class="budget-opt" data-val="$$$">$$$ Splurge</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Tags / Vibes</label>
+        <div class="tags-wrap" id="tags-wrap">
+          <input type="text" id="tags-input" placeholder="romantic, cozy…">
+        </div>
+        <p class="tag-hint">Press Enter or comma to add a tag</p>
+      </div>
+      <div class="form-actions">
+        <button class="btn-cancel" id="add-cancel">Cancel</button>
+        <button class="btn-submit" id="btn-save-idea">Save Idea ♡</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WE DID IT MODAL -->
+<div class="modal-overlay" id="didit-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <h2>✓ We Did It!</h2>
+      <button class="btn-close" id="didit-close">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:18px;line-height:1.5">
+        Logging the memory of <strong id="didit-name"></strong> ♡
+      </p>
+      <div class="form-group">
+        <label>Date We Went</label>
+        <input type="date" id="f-date-done">
+      </div>
+      <div class="form-group">
+        <label>Notes &amp; Memories</label>
+        <textarea id="f-notes" style="min-height:120px" placeholder="How was it? Funny moments? Would you go back?"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Photos</label>
+        <div class="photo-drop" id="photo-drop">
+          <div class="upload-icon">📷</div>
+          <div>Tap to add photos</div>
+          <div style="font-size:0.76rem;margin-top:4px;color:var(--text-muted)">JPG, PNG — multiple OK</div>
+        </div>
+        <input type="file" id="f-photos" accept="image/*" multiple style="display:none">
+        <div class="photo-previews" id="photo-previews"></div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-cancel" id="didit-cancel">Cancel</button>
+        <button class="btn-submit" id="btn-save-memory">Save Memory ♡</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT MEMORY MODAL -->
+<div class="modal-overlay" id="edit-mem-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <h2>✏️ Edit Memory</h2>
+      <button class="btn-close" id="edit-mem-close">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:18px;line-height:1.5">
+        Editing memory of <strong id="edit-mem-name"></strong>
+      </p>
+      <div class="form-group">
+        <label>Date We Went</label>
+        <input type="date" id="em-date">
+      </div>
+      <div class="form-group">
+        <label>Notes &amp; Memories</label>
+        <textarea id="em-notes" style="min-height:140px" placeholder="How was it? Funny moments? Would you go back?"></textarea>
+      </div>
+      <div class="form-actions">
+        <button class="btn-cancel" id="edit-mem-cancel">Cancel</button>
+        <button class="btn-submit" id="btn-update-memory">Save Changes ♡</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay" id="mem-modal">
+  <div class="modal" style="max-width:660px">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <h2 id="mem-title" style="font-style:italic"></h2>
+      <button class="btn-close" id="mem-close">✕</button>
+    </div>
+    <div class="modal-body" id="mem-body"></div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div id="lightbox">
+  <button id="lb-close">✕</button>
+  <img id="lb-img" src="" alt="">
+  <div class="lb-nav">
+    <button id="lb-prev">‹</button>
+    <button id="lb-next">›</button>
+  </div>
+  <div class="lb-counter" id="lb-counter"></div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* CONFIG — change PASSKEY to whatever you want */
+  var PASSKEY     = 'ourpasskey';
+  var SB_URL      = 'https://emqzzkiujfzkxmnevmfb.supabase.co';
+  var SB_KEY      = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVtcXp6a2l1amZ6a3htbmV2bWZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2NDU0MDMsImV4cCI6MjA5MjIyMTQwM30.ZHYwEdv6UGsWiIEP9Mw85PPKwsajhrSmE4Th8mZn6ns';
+  var BUCKET      = 'date-photos';
+  var SESSION_KEY = 'dateapp_ok';
+  var sb;
+
+  /* ─ PASSKEY GATE ─ */
+  function grantAccess() {
+    sessionStorage.setItem(SESSION_KEY, '1');
+    document.getElementById('lock-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    sb = window.supabase.createClient(SB_URL, SB_KEY);
+    loadData();
+  }
+
+  if (sessionStorage.getItem(SESSION_KEY) === '1') { grantAccess(); }
+
+  document.getElementById('btn-unlock').addEventListener('click', tryUnlock);
+  document.getElementById('passkey-input').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') tryUnlock();
+    document.getElementById('lock-error').textContent = '';
+  });
+
+  function tryUnlock() {
+    var val = document.getElementById('passkey-input').value;
+    if (val === PASSKEY) {
+      grantAccess();
+    } else {
+      var inp = document.getElementById('passkey-input');
+      inp.classList.remove('shake'); void inp.offsetWidth; inp.classList.add('shake');
+      document.getElementById('lock-error').textContent = 'Incorrect — try again';
+      inp.value = '';
+      setTimeout(function () { inp.classList.remove('shake'); }, 450);
+    }
+  }
+
+  document.getElementById('btn-lock-out').addEventListener('click', function () {
+    sessionStorage.removeItem(SESSION_KEY); location.reload();
+  });
+
+  /* ─ STATE ─ */
+  var allIdeas = [], allLogs = [];
+  var editingId = null, diditId = null;
+  var currentTags = [], selectedBudget = '', selectedPhotos = [];
+  var locResults = [], locDebounce = null, locPicked = false;
+  var lbPhotos = [], lbIndex = 0;
+
+  /* ─ UTILS ─ */
+  function esc(s) {
+    if (s == null) return '';
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  var toastTimer;
+  function toast(msg) {
+    var el = document.getElementById('toast');
+    el.textContent = msg; el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { el.classList.remove('show'); }, 2800);
+  }
+  function openModal(id)  { document.getElementById(id).classList.add('open');    document.body.style.overflow = 'hidden'; }
+  function closeModal(id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow = ''; }
+  document.querySelectorAll('.modal-overlay').forEach(function (el) {
+    el.addEventListener('click', function (e) { if (e.target === this) closeModal(this.id); });
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(function (el) { closeModal(el.id); });
+  });
+
+  /* ─ TABS ─ */
+  document.getElementById('tab-ideas').addEventListener('click',    function () { switchTab('ideas'); });
+  document.getElementById('tab-memories').addEventListener('click', function () { switchTab('memories'); });
+  function switchTab(tab) {
+    document.getElementById('pane-ideas').style.display    = tab === 'ideas'    ? '' : 'none';
+    document.getElementById('pane-memories').style.display = tab === 'memories' ? '' : 'none';
+    document.getElementById('tab-ideas').classList.toggle('active',    tab === 'ideas');
+    document.getElementById('tab-memories').classList.toggle('active', tab === 'memories');
+  }
+
+  /* ─ LOAD ─ */
+  function loadData() {
+    return Promise.all([
+      sb.from('date_ideas').select('*').order('created_at', { ascending: false }),
+      sb.from('date_logs').select('*').order('date_done',   { ascending: false })
+    ]).then(function (r) {
+      if (r[0].error) { toast('Error: ' + r[0].error.message); return; }
+      if (r[1].error) { toast('Error: ' + r[1].error.message); return; }
+      allIdeas = r[0].data || []; allLogs = r[1].data || [];
+      buildFilterDropdown(); renderIdeas(); renderMemories();
+    });
+  }
+
+  /* ─ FILTER DROPDOWN ─ */
+  function buildFilterDropdown() {
+    var sel = document.getElementById('filter-select');
+    var cur = sel.value;
+    while (sel.options.length > 1) sel.remove(1);
+    var cats = [];
+    allIdeas.forEach(function (i) { if (i.category && cats.indexOf(i.category) === -1) cats.push(i.category); });
+    cats.forEach(function (c) { var o = document.createElement('option'); o.value = c; o.textContent = c; sel.appendChild(o); });
+    if (cats.indexOf(cur) > -1) sel.value = cur;
+    sel.classList.toggle('active', !!sel.value);
+  }
+  document.getElementById('filter-select').addEventListener('change', function () {
+    this.classList.toggle('active', !!this.value); renderIdeas();
+  });
+  document.getElementById('ideas-search').addEventListener('input', renderIdeas);
+
+  /* ─ RENDER IDEAS ─ */
+  function renderIdeas() {
+    var q      = document.getElementById('ideas-search').value.toLowerCase();
+    var filter = document.getElementById('filter-select').value;
+    var grid   = document.getElementById('ideas-grid');
+    var doneIds = {};
+    allLogs.forEach(function (l) { doneIds[l.idea_id] = true; });
+
+    var ideas = allIdeas.filter(function (i) {
+      var tm = !q ||
+        (i.name||'').toLowerCase().indexOf(q)>-1 ||
+        (i.description||'').toLowerCase().indexOf(q)>-1 ||
+        (i.category||'').toLowerCase().indexOf(q)>-1 ||
+        (i.tags||[]).some(function(t){return t.toLowerCase().indexOf(q)>-1;});
+      return tm && (!filter || i.category === filter);
+    });
+
+    if (!ideas.length) {
+      grid.innerHTML = '<div class="empty-state"><div class="emoji">💭</div><h3>No ideas yet</h3><p>Start building your bucket list of adventures!</p></div>';
+      return;
+    }
+    var html = '';
+    ideas.forEach(function (idea) {
+      var done = !!doneIds[idea.id];
+      var meta = '';
+      if (idea.location_name) meta += '<div class="meta-pill" title="'+esc(idea.location_address)+'">📍 '+esc(idea.location_name)+'</div>';
+      if (idea.budget)        meta += '<div class="meta-pill">💰 '+esc(idea.budget)+'</div>';
+      var tags = idea.tags && idea.tags.length ? '<div class="card-tags">'+idea.tags.map(function(t){return'<span class="card-tag">'+esc(t)+'</span>';}).join('')+'</div>' : '';
+      var actionBtn = done
+        ? '<button class="btn-view-memory" data-action="view-mem" data-id="'+esc(idea.id)+'">📸 View Memory</button>'
+        : '<button class="btn-did-it"      data-action="did-it"   data-id="'+esc(idea.id)+'" data-name="'+esc(idea.name)+'">✓ We Did It!</button>';
+      html += '<div class="idea-card'+(done?' done-card':'')+'">';
+      if (done) html += '<div class="done-ribbon">Done ✓</div>';
+      if (idea.category)    html += '<div class="card-category">'+esc(idea.category)+'</div>';
+      html += '<div class="card-name">'+esc(idea.name)+'</div>';
+      if (idea.description) html += '<div class="card-desc">'+esc(idea.description)+'</div>';
+      if (meta)             html += '<div class="card-meta">'+meta+'</div>';
+      html += tags;
+      html += '<div class="card-actions">'+actionBtn;
+      html += '<button class="btn-icon" data-action="edit"   data-id="'+esc(idea.id)+'" title="Edit">✏️</button>';
+      html += '<button class="btn-icon" data-action="delete" data-id="'+esc(idea.id)+'" title="Delete">🗑</button>';
+      html += '</div></div>';
+    });
+    grid.innerHTML = html;
+  }
+
+  document.getElementById('ideas-grid').addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-action]'); if (!btn) return;
+    var act = btn.getAttribute('data-action'), id = btn.getAttribute('data-id');
+    if (act==='did-it')   openDidItModal(id, btn.getAttribute('data-name'));
+    if (act==='view-mem') openMemModal(id);
+    if (act==='edit')     openEditModal(id);
+    if (act==='delete')   deleteIdea(id);
+  });
+
+  /* ─ RENDER MEMORIES ─ */
+  document.getElementById('memories-search').addEventListener('input', renderMemories);
+  function renderMemories() {
+    var q    = document.getElementById('memories-search').value.toLowerCase();
+    var grid = document.getElementById('memories-grid');
+    var logMap = {}; allLogs.forEach(function(l){ logMap[l.idea_id]=l; });
+    var items = allIdeas.filter(function(i){
+      if (!logMap[i.id]) return false;
+      if (!q) return true;
+      var log = logMap[i.id];
+      return (i.name||'').toLowerCase().indexOf(q)>-1 ||
+             (log.notes||'').toLowerCase().indexOf(q)>-1 ||
+             (i.category||'').toLowerCase().indexOf(q)>-1;
+    });
+    if (!items.length) {
+      grid.innerHTML='<div class="empty-state"><div class="emoji">🌟</div><h3>No memories yet</h3><p>Go on a date and hit "We Did It!" to start your memory book.</p></div>';
+      return;
+    }
+    var html = '';
+    items.forEach(function(idea){
+      var log    = logMap[idea.id];
+      var photos = log.photo_urls || [];
+      var thumb  = photos.length ? photos[0] : null;
+      var dateStr = '';
+      if (log.date_done) dateStr = new Date(log.date_done+'T12:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+      html += '<div class="memory-card" data-action="view-mem" data-id="'+esc(idea.id)+'">';
+      html += '<div class="memory-thumb">';
+      if (thumb) {
+        html += '<img src="'+esc(thumb)+'" loading="lazy" alt="">';
+        if (photos.length>1) html += '<div class="memory-photo-badge">📷 '+photos.length+'</div>';
+      } else {
+        html += '<div class="no-photo">🌸</div>';
+      }
+      html += '</div><div class="memory-body">';
+      if (dateStr)            html += '<div class="memory-date">♡ '+esc(dateStr)+'</div>';
+      html += '<div class="memory-name">'+esc(idea.name)+'</div>';
+      if (log.notes)          html += '<div class="memory-notes">'+esc(log.notes)+'</div>';
+      if (idea.location_name) html += '<div class="memory-location">📍 '+esc(idea.location_name)+'</div>';
+      html += '</div></div>';
+    });
+    grid.innerHTML = html;
+  }
+
+  document.getElementById('memories-grid').addEventListener('click', function(e){
+    var c = e.target.closest('[data-action="view-mem"]'); if(c) openMemModal(c.getAttribute('data-id'));
+  });
+
+  /* ─ MEMORY DETAIL ─ */
+  document.getElementById('mem-close').addEventListener('click', function(){ closeModal('mem-modal'); });
+
+  function openMemModal(ideaId) {
+    var idea=null, log=null;
+    allIdeas.forEach(function(i){ if(i.id===ideaId) idea=i; });
+    allLogs.forEach(function(l){  if(l.idea_id===ideaId) log=l; });
+    if (!idea) return;
+
+    document.getElementById('mem-title').textContent = idea.name;
+    var dateStr = '';
+    if (log&&log.date_done) dateStr = new Date(log.date_done+'T12:00:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+    var photos = (log&&log.photo_urls) ? log.photo_urls : [];
+    var html = '';
+
+    if (dateStr)           html += '<p style="color:var(--done);font-size:0.85rem;font-weight:500;margin-bottom:14px">♡ '+esc(dateStr)+'</p>';
+    if (idea.category)     html += '<div class="card-category" style="margin-bottom:12px">'+esc(idea.category)+'</div>';
+    if (idea.description)  html += '<p style="font-size:0.9rem;color:var(--text-muted);line-height:1.6;margin-bottom:14px">'+esc(idea.description)+'</p>';
+    if (idea.location_address) html += '<p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:14px">📍 '+esc(idea.location_address)+'</p>';
+    if (log&&log.notes)    html += '<div style="background:var(--surface2);border-radius:12px;padding:16px;margin-bottom:18px;border:1px solid var(--border)"><p style="font-size:0.73rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px">Notes</p><p style="font-size:0.9rem;line-height:1.65;white-space:pre-wrap">'+esc(log.notes)+'</p></div>';
+
+    /* Gallery */
+    if (photos.length) {
+      var cnt = photos.length;
+      var MAX_GRID = 6; // show up to 6 in grid
+      var showCount = cnt <= MAX_GRID ? cnt : MAX_GRID;
+      var gridCls = cnt===1?'g1': cnt===2?'g2': cnt===3?'g3': cnt===4?'g4':'gmany';
+      html += '<p style="font-size:0.73rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px">'+cnt+' Photo'+(cnt>1?'s':'')+'</p>';
+      html += '<div class="gallery-grid '+gridCls+'">';
+      for (var gi=0; gi<showCount; gi++) {
+        var isLast = gi===showCount-1 && cnt>showCount;
+        var extra  = cnt - showCount;
+        html += '<div class="g-img" data-lb="'+gi+'">';
+        html += '<img src="'+esc(photos[gi])+'" loading="lazy" alt="">';
+        if (isLast) html += '<div class="g-more" data-lb="'+gi+'">+'+extra+'</div>';
+        html += '</div>';
+      }
+      html += '</div>';
+    }
+
+    document.getElementById('mem-body').innerHTML = html;
+    lbPhotos = photos;
+
+    document.getElementById('mem-body').querySelectorAll('[data-lb]').forEach(function(el){
+      el.addEventListener('click', function(){ openLightbox(parseInt(this.getAttribute('data-lb'))); });
+    });
+
+    // Edit memory button
+    var editBtn = document.createElement('button');
+    editBtn.className = 'btn-edit-memory';
+    editBtn.innerHTML = '✏️ Edit notes &amp; date';
+    editBtn.addEventListener('click', function(){ openEditMemModal(ideaId); });
+    document.getElementById('mem-body').appendChild(editBtn);
+
+    openModal('mem-modal');
+  }
+
+  /* ─ LIGHTBOX ─ */
+  function openLightbox(idx) {
+    lbIndex = idx;
+    document.getElementById('lb-img').src = lbPhotos[lbIndex];
+    updateLbCounter();
+    document.getElementById('lightbox').classList.add('open');
+  }
+  function updateLbCounter() {
+    document.getElementById('lb-counter').textContent = lbPhotos.length>1 ? (lbIndex+1)+' / '+lbPhotos.length : '';
+    document.getElementById('lb-prev').style.display = lbPhotos.length>1 ? '' : 'none';
+    document.getElementById('lb-next').style.display = lbPhotos.length>1 ? '' : 'none';
+  }
+  document.getElementById('lb-close').addEventListener('click', function(){ document.getElementById('lightbox').classList.remove('open'); });
+  document.getElementById('lightbox').addEventListener('click', function(e){ if(e.target===this) this.classList.remove('open'); });
+  document.getElementById('lb-prev').addEventListener('click', function(){ lbIndex=(lbIndex-1+lbPhotos.length)%lbPhotos.length; document.getElementById('lb-img').src=lbPhotos[lbIndex]; updateLbCounter(); });
+  document.getElementById('lb-next').addEventListener('click', function(){ lbIndex=(lbIndex+1)%lbPhotos.length; document.getElementById('lb-img').src=lbPhotos[lbIndex]; updateLbCounter(); });
+  document.addEventListener('keydown', function(e){
+    if (!document.getElementById('lightbox').classList.contains('open')) return;
+    if (e.key==='ArrowLeft')  document.getElementById('lb-prev').click();
+    if (e.key==='ArrowRight') document.getElementById('lb-next').click();
+    if (e.key==='Escape')     document.getElementById('lightbox').classList.remove('open');
+  });
+
+  /* ─ ADD / EDIT ─ */
+  document.getElementById('btn-open-add').addEventListener('click', openAddModal);
+  document.getElementById('add-close').addEventListener('click',   function(){ closeModal('add-modal'); });
+  document.getElementById('add-cancel').addEventListener('click',  function(){ closeModal('add-modal'); });
+
+  function resetAddForm() {
+    currentTags=[]; selectedBudget='';
+    document.getElementById('f-name').value=''; document.getElementById('f-desc').value=''; document.getElementById('f-category').value='';
+    clearLoc(); clearBudgetUI(); renderTags();
+  }
+  function openAddModal() {
+    editingId=null; document.getElementById('modal-title').textContent='New Date Idea ♡'; resetAddForm();
+    openModal('add-modal'); setTimeout(function(){ document.getElementById('f-name').focus(); },350);
+  }
+  function openEditModal(ideaId) {
+    var idea=null; allIdeas.forEach(function(i){ if(i.id===ideaId) idea=i; }); if(!idea) return;
+    editingId=ideaId; resetAddForm();
+    currentTags=idea.tags?idea.tags.slice():[]; selectedBudget=idea.budget||'';
+    document.getElementById('modal-title').textContent='Edit Date Idea';
+    document.getElementById('f-name').value=idea.name||''; document.getElementById('f-desc').value=idea.description||''; document.getElementById('f-category').value=idea.category||'';
+    if (idea.location_name) {
+      var inp=document.getElementById('f-loc-input');
+      inp.value=idea.location_address||idea.location_name;
+      inp.dataset.locName=idea.location_name; inp.dataset.locAddress=idea.location_address||'';
+      inp.dataset.locLat=idea.location_lat||''; inp.dataset.locLon=idea.location_lon||'';
+      locPicked=true; document.getElementById('f-loc-clear').style.display='block';
+    }
+    if (selectedBudget) document.querySelectorAll('#budget-row .budget-opt').forEach(function(b){ b.classList.toggle('sel',b.getAttribute('data-val')===selectedBudget); });
+    renderTags(); openModal('add-modal');
+  }
+  document.getElementById('btn-save-idea').addEventListener('click', function(){
+    var btn=this, name=document.getElementById('f-name').value.trim();
+    if (!name){ toast('Please enter a name'); return; }
+    btn.disabled=true; btn.textContent='Saving…';
+    var inp=document.getElementById('f-loc-input');
+    var payload={
+      name:name, description:document.getElementById('f-desc').value.trim()||null,
+      category:document.getElementById('f-category').value||null,
+      location_name:    locPicked?(inp.dataset.locName||null):null,
+      location_address: locPicked?(inp.dataset.locAddress||null):null,
+      location_lat:     locPicked&&inp.dataset.locLat?parseFloat(inp.dataset.locLat):null,
+      location_lon:     locPicked&&inp.dataset.locLon?parseFloat(inp.dataset.locLon):null,
+      budget:selectedBudget||null, tags:currentTags.length?currentTags:null,
+    };
+    var op=editingId?sb.from('date_ideas').update(payload).eq('id',editingId):sb.from('date_ideas').insert(payload);
+    op.then(function(res){ btn.disabled=false; btn.textContent='Save Idea ♡'; if(res.error){toast('Error: '+res.error.message);return;} closeModal('add-modal'); toast(editingId?'Idea updated ✓':'Idea saved ♡'); loadData(); });
+  });
+  function deleteIdea(id) {
+    if (!confirm('Delete this idea? Its memory will also be removed.')) return;
+    sb.from('date_ideas').delete().eq('id',id).then(function(res){ if(res.error){toast('Error: '+res.error.message);return;} toast('Deleted'); loadData(); });
+  }
+
+  /* ─ EDIT MEMORY ─ */
+  document.getElementById('edit-mem-close').addEventListener('click',  function(){ closeModal('edit-mem-modal'); });
+  document.getElementById('edit-mem-cancel').addEventListener('click', function(){ closeModal('edit-mem-modal'); });
+
+  function openEditMemModal(ideaId) {
+    var idea=null, log=null;
+    allIdeas.forEach(function(i){ if(i.id===ideaId) idea=i; });
+    allLogs.forEach(function(l){  if(l.idea_id===ideaId) log=l; });
+    if (!idea||!log) return;
+    document.getElementById('edit-mem-name').textContent = idea.name;
+    document.getElementById('em-date').value  = log.date_done || '';
+    document.getElementById('em-notes').value = log.notes    || '';
+    document.getElementById('btn-update-memory').dataset.logId  = log.id;
+    document.getElementById('btn-update-memory').dataset.ideaId = ideaId;
+    closeModal('mem-modal');
+    openModal('edit-mem-modal');
+  }
+
+  document.getElementById('btn-update-memory').addEventListener('click', function(){
+    var btn    = this;
+    var logId  = btn.dataset.logId;
+    var ideaId = btn.dataset.ideaId;
+    btn.disabled = true; btn.textContent = 'Saving…';
+    sb.from('date_logs').update({
+      date_done: document.getElementById('em-date').value  || null,
+      notes:     document.getElementById('em-notes').value.trim() || null,
+    }).eq('id', logId).then(function(res){
+      btn.disabled = false; btn.textContent = 'Save Changes ♡';
+      if (res.error){ toast('Error: '+res.error.message); return; }
+      closeModal('edit-mem-modal');
+      toast('Memory updated ✓');
+      loadData().then(function(){ openMemModal(ideaId); });
+    });
+  });
+
+  /* ─ WE DID IT ─ */
+  document.getElementById('didit-close').addEventListener('click',  function(){ closeModal('didit-modal'); });
+  document.getElementById('didit-cancel').addEventListener('click', function(){ closeModal('didit-modal'); });
+  function openDidItModal(ideaId, ideaName) {
+    diditId=ideaId; selectedPhotos=[];
+    document.getElementById('didit-name').textContent=ideaName;
+    document.getElementById('f-date-done').value=new Date().toISOString().split('T')[0];
+    document.getElementById('f-notes').value=''; document.getElementById('photo-previews').innerHTML=''; document.getElementById('f-photos').value='';
+    openModal('didit-modal');
+  }
+  document.getElementById('photo-drop').addEventListener('click', function(){ document.getElementById('f-photos').click(); });
+  document.getElementById('f-photos').addEventListener('change', function(){ Array.from(this.files).forEach(function(f){ selectedPhotos.push(f); }); renderPhotoPreviews(); this.value=''; });
+  function renderPhotoPreviews() {
+    document.getElementById('photo-previews').innerHTML=selectedPhotos.map(function(f,i){
+      return '<div class="preview-wrap"><img src="'+URL.createObjectURL(f)+'" alt=""><button class="rm-photo" data-idx="'+i+'">✕</button></div>';
+    }).join('');
+  }
+  document.getElementById('photo-previews').addEventListener('click', function(e){
+    var btn=e.target.closest('.rm-photo'); if(!btn) return;
+    selectedPhotos.splice(parseInt(btn.getAttribute('data-idx')),1); renderPhotoPreviews();
+  });
+  document.getElementById('btn-save-memory').addEventListener('click', function(){
+    var btn=this; btn.disabled=true; btn.textContent='Saving…';
+    var uploads=selectedPhotos.map(function(file){
+      var ext=file.name.split('.').pop().toLowerCase();
+      var path=diditId+'/'+Date.now()+'-'+Math.random().toString(36).slice(2)+'.'+ext;
+      return sb.storage.from(BUCKET).upload(path,file).then(function(res){
+        if(res.error){toast('Photo upload failed: '+res.error.message);return null;}
+        return sb.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
+      });
+    });
+    Promise.all(uploads).then(function(urls){
+      var photoUrls=urls.filter(function(u){return!!u;});
+      return sb.from('date_logs').insert({
+        idea_id:diditId, date_done:document.getElementById('f-date-done').value||null,
+        notes:document.getElementById('f-notes').value.trim()||null,
+        photo_urls:photoUrls.length?photoUrls:null,
+      });
+    }).then(function(res){
+      if(res.error){btn.disabled=false;btn.textContent='Save Memory ♡';toast('Error: '+res.error.message);return;}
+      return sb.from('date_ideas').update({done:true}).eq('id',diditId);
+    }).then(function(){
+      btn.disabled=false; btn.textContent='Save Memory ♡';
+      closeModal('didit-modal'); toast('Memory saved! 🌸');
+      loadData().then(function(){ switchTab('memories'); });
+    });
+  });
+
+  /* ─ LOCATION ─ */
+  var locInput=document.getElementById('f-loc-input'), locDD=document.getElementById('f-loc-dd'), locClear=document.getElementById('f-loc-clear');
+  locInput.addEventListener('input', function(){
+    locPicked=false; locInput.dataset.locName=locInput.dataset.locAddress=locInput.dataset.locLat=locInput.dataset.locLon='';
+    var q=locInput.value.trim(); locClear.style.display=q?'block':'none';
+    clearTimeout(locDebounce); if(q.length<3){locDD.classList.remove('open');return;}
+    locDebounce=setTimeout(function(){fetchLoc(q);},350);
+  });
+  locClear.addEventListener('click', clearLoc);
+  document.addEventListener('click', function(e){ if(!e.target.closest('.location-wrap')) locDD.classList.remove('open'); });
+  function fetchLoc(q) {
+    fetch('https://nominatim.openstreetmap.org/search?q='+encodeURIComponent(q)+'&format=json&limit=6&addressdetails=1',{headers:{'Accept-Language':'en'}})
+      .then(function(r){return r.json();}).then(function(data){
+        locResults=data;
+        locDD.innerHTML=data.map(function(r,i){ var n=r.name||r.display_name.split(',')[0]; return '<div class="loc-item" data-idx="'+i+'"><div class="loc-name">'+esc(n)+'</div><div class="loc-addr">'+esc(r.display_name)+'</div></div>'; }).join('');
+        locDD.classList.toggle('open',data.length>0);
+      }).catch(function(){});
+  }
+  locDD.addEventListener('click', function(e){
+    var item=e.target.closest('.loc-item'); if(!item) return;
+    var r=locResults[parseInt(item.getAttribute('data-idx'))];
+    var name=r.name||r.display_name.split(',')[0];
+    locInput.value=r.display_name; locInput.dataset.locName=name; locInput.dataset.locAddress=r.display_name;
+    locInput.dataset.locLat=r.lat; locInput.dataset.locLon=r.lon;
+    locPicked=true; locClear.style.display='block'; locDD.classList.remove('open');
+  });
+  function clearLoc() {
+    locInput.value=''; locInput.dataset.locName=locInput.dataset.locAddress=locInput.dataset.locLat=locInput.dataset.locLon='';
+    locPicked=false; locClear.style.display='none'; locDD.classList.remove('open');
+  }
+
+  /* ─ TAGS ─ */
+  document.getElementById('tags-input').addEventListener('keydown', function(e){
+    if(e.key!=='Enter'&&e.key!==',') return; e.preventDefault();
+    var val=this.value.trim().replace(/,$/,'');
+    if(val&&currentTags.indexOf(val)===-1){currentTags.push(val);renderTags();} this.value='';
+  });
+  document.getElementById('tags-wrap').addEventListener('click', function(e){
+    var btn=e.target.closest('.tag-chip button');
+    if(!btn){document.getElementById('tags-input').focus();return;}
+    currentTags.splice(parseInt(btn.getAttribute('data-idx')),1); renderTags();
+  });
+  function renderTags() {
+    var wrap=document.getElementById('tags-wrap'), input=document.getElementById('tags-input');
+    wrap.innerHTML=currentTags.map(function(t,i){return'<span class="tag-chip">'+esc(t)+'<button data-idx="'+i+'">✕</button></span>';}).join('');
+    wrap.appendChild(input);
+  }
+
+  /* ─ BUDGET ─ */
+  document.getElementById('budget-row').addEventListener('click', function(e){
+    var btn=e.target.closest('.budget-opt'); if(!btn) return;
+    selectedBudget=btn.getAttribute('data-val');
+    document.querySelectorAll('#budget-row .budget-opt').forEach(function(b){b.classList.toggle('sel',b===btn);});
+  });
+  function clearBudgetUI() { document.querySelectorAll('#budget-row .budget-opt').forEach(function(b){b.classList.remove('sel');}); }
+
+}());
+</script>
+</body>
+</html>
